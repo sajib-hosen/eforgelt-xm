@@ -36,7 +36,7 @@
       "./src" // <--- Make sure this line exists and points to your custom types
     ] /* Specify multiple folders that act like './node_modules/@types'. */,
     "types": [
-      "node"
+      "node",
       "express"
     ] /* Specify type package names to be included without being referenced in a source file. */,
     // "allowUmdGlobalAccess": true,                     /* Allow accessing UMD globals from modules. */
