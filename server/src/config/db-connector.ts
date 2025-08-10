@@ -5,7 +5,7 @@ dotenv.config();
 const DB_URL = process.env.DB_URL;
 
 if (!DB_URL) {
-  throw new Error("❌ MONGO_URI is missing from environment variables.");
+  throw new Error("MONGO_URI is missing from environment variables.");
 }
 
 const connectToDatabase = async () => {
@@ -14,7 +14,7 @@ const connectToDatabase = async () => {
 
     console.log("Database Connected! 🌧️");
   } catch (err) {
-    // console.error("Could not connect to db !", err);
+    console.error("Could not connect to db !", err);
     process.exit(1);
   }
 };
