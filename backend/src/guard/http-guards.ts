@@ -105,7 +105,7 @@ export async function adminGuard(
         process.env.JWT_SECRET as string
       ) as JwtPayload;
 
-      console.log("admin guard", decoded);
+      // console.log("admin guard", decoded);
 
       if (!decoded?.id || decoded.role !== "admin") {
         return res.status(401).json({ message: "User unauthorized!" });
