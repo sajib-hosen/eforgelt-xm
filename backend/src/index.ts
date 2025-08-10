@@ -1,9 +1,5 @@
-// Importing core packages and necessary types
 import express, { Request, Response } from "express";
-// import paymentRouter from "./modules/payment/payment.controller"; // Payment-related routes
-// import authGuard from "./guard/auth-guard"; // Middleware to protect routes
-// import asyncHandler from "./utils/async-handler"; // Helper to catch async errors
-// User-related routes
+
 import userRouter from "./modules/user/user.route"; // User-related routes
 import cors from "cors"; // Middleware to handle CORS (Cross-Origin requests)
 import helmet from "helmet"; // Security middleware to set HTTP headers
@@ -12,6 +8,8 @@ import rateLimit from "express-rate-limit"; // To limit repeated requests (e.g. 
 import cookieParser from "cookie-parser"; // To parse cookies from the client
 import morgan from "morgan"; // HTTP request logger middleware
 import connectToDatabase from "./config/db-connector";
+import quizRouter from "./modules/quiz/quiz.route"; // Quiz-related routes
+import adminRouter from "./modules/admin/admin.route"; // Admin-related routes
 
 // Create Express application
 const app = express();
@@ -19,12 +17,8 @@ const app = express();
 // Load environment variables from .env into process.env
 dotenv.config();
 
-// Set the server port from .env or fallback to 3000
 const PORT = process.env.PORT || 3000;
 
-// Middleware to parse incoming JSON requests
-// If you do not set app.use(express.json()), your Express server will not be able to automatically parse incoming JSON request bodies
-// console.log(req.body); // will be undefined
 app.use(express.json());
 
 // Enable CORS (Cross-Origin Resource Sharing) for the frontend
@@ -37,18 +31,14 @@ app.use(
   })
 );
 
-// Use Helmet to enhance security by setting various HTTP headers
 app.use(helmet());
 
-// Rate limiting middleware: limit each IP to 100 requests every 15 minutes
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 15 minutes
   max: 100, // Max 100 requests per IP
 });
 app.use(limiter); // Apply rate limiter globally
 
-// Middleware to parse cookies from incoming requests
-// Without cookie-parser, you cannot access cookies via req.cookies in your route handlers
 app.use(cookieParser());
 
 app.use(morgan("dev")); // logs method, url, status, response time, etc.
@@ -82,22 +72,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Route to handle all /payment requests, protected with auth middleware
-// app.use(
-//   "/payment",
-//   rateLimit({
-//     windowMs: 10 * 60 * 1000, // 10 minutes
-//     max: 20, // Max 20 requests per IP
-//   }),
-
-//   asyncHandler(authGuard)
-// );
-
-import quizRouter from "./modules/quiz/quiz.route"; // Quiz-related routes
-
-import adminRouter from "./modules/admin/admin.route"; // Admin-related routes
-
-// Route to handle all /user requests (public or protected inside the controller)
 app.use("/api/users", userRouter);
 app.use("/api/quizzes", quizRouter);
 app.use("/api/admin", adminRouter);
