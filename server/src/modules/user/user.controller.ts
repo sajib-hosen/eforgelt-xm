@@ -28,9 +28,9 @@ export const createUser = async (
     const { user } = req.body;
     //console.log("user from controller", user);
     // const result = await userService.createUserRegistration(user);
-    const { name, email } = req.body;
+    // const { name, email } = req.body;
 
-    const existingUser = await findUserByEmail(email);
+    // const existingUser = await findUserByEmail(email);
 
     res.status(200).json({
       success: true,
