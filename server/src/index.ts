@@ -61,7 +61,7 @@ app.use((err: any, req: Request, res: Response, next: Function) => {
 
 // Start server only if DB connects
 const run = async () => {
-  await connectToDatabase();
+  // await connectToDatabase();
 
   app.listen(PORT, () => {
     console.log(
