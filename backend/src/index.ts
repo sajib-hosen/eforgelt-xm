@@ -44,33 +44,33 @@ app.use(cookieParser());
 app.use(morgan("dev")); // logs method, url, status, response time, etc.
 
 // Middleware to log every request
-app.use((req, res, next) => {
-  const start = Date.now();
+// app.use((req, res, next) => {
+//   const start = Date.now();
 
-  res.on("finish", () => {
-    const duration = Date.now() - start;
+//   res.on("finish", () => {
+//     const duration = Date.now() - start;
 
-    // ANSI escape codes for colors
-    const reset = "\x1b[0m";
-    const cyan = "\x1b[36m";
-    const magenta = "\x1b[35m";
-    const green = "\x1b[32m";
-    const yellow = "\x1b[33m";
-    const red = "\x1b[31m";
-    const blue = "\x1b[34m";
+//     // ANSI escape codes for colors
+//     const reset = "\x1b[0m";
+//     const cyan = "\x1b[36m";
+//     const magenta = "\x1b[35m";
+//     const green = "\x1b[32m";
+//     const yellow = "\x1b[33m";
+//     const red = "\x1b[31m";
+//     const blue = "\x1b[34m";
 
-    // Choose color based on status code
-    let statusColor = green;
-    if (res.statusCode >= 300 && res.statusCode < 400) statusColor = yellow;
-    else if (res.statusCode >= 400) statusColor = red;
+//     // Choose color based on status code
+//     let statusColor = green;
+//     if (res.statusCode >= 300 && res.statusCode < 400) statusColor = yellow;
+//     else if (res.statusCode >= 400) statusColor = red;
 
-    console.log(
-      `${cyan}${req.method}${reset} ${magenta}${req.originalUrl}${reset} -> ${statusColor}${res.statusCode}${reset} [${blue}${duration}ms${reset}]`
-    );
-  });
+//     console.log(
+//       `${cyan}${req.method}${reset} ${magenta}${req.originalUrl}${reset} -> ${statusColor}${res.statusCode}${reset} [${blue}${duration}ms${reset}]`
+//     );
+//   });
 
-  next();
-});
+//   next();
+// });
 
 app.use("/api/users", userRouter);
 app.use("/api/quizzes", quizRouter);
