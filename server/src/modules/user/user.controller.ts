@@ -1,13 +1,14 @@
-import { Request, Response } from "express";
-import {
-  createUser,
-  // createUserToken,
-  findUserByEmail,
-  // findUserById,
-  // findUserTokenById,
-  // updateUserToken,
-  // verifyUserEmail,
-} from "./user.service";
+import { NextFunction, Request, Response } from "express";
+import { findUserByEmail } from "./user.service";
+// import {
+// createUser,
+// createUserToken,
+// findUserByEmail,
+// findUserById,
+// findUserTokenById,
+// updateUserToken,
+// verifyUserEmail,
+// } from "./user.service";
 // import * as bcrypt from "bcrypt";
 // import { IUser } from "../../types/user/user.types";
 // import { sendEmail } from "../../utils/send-email";
@@ -18,37 +19,61 @@ import {
 // import { EXPIRY_STAMP } from "../../utils/expiry-stamp";
 // import environment from "../../config";
 
-export const registerUser = async (req: Request, res: Response) => {
+export const createUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const { name, email, password } = req.body;
+    const { user } = req.body;
+    //console.log("user from controller", user);
+    // const result = await userService.createUserRegistration(user);
+    const { name, email } = req.body;
 
     const existingUser = await findUserByEmail(email);
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
-    }
 
-    await createUser({ name, email, password }); // Create new user in the database
-
-    // const userToken = await createUserToken({
-    //   type: "verify-email",
-    //   email,
-    //   isUsed: false,
-    // });
-
-    // const newLink = `${environment.client_base_url}/verify-email/${userToken.id}`; // Generate verification link
-
-    // await sendEmail(
-    //   email, // Recipient email
-    //   `Confirm your email address for ${APP_NAME}`, // Email subject
-    //   verificationEmailHTML(name, newLink) // HTML email content
-    // );
-
-    res.status(201).json({ message: "User created successfully" }); // Send success response
-  } catch (error) {
-    console.log("register error", error);
-    res.status(500).json({ message: "Internal server error" }); // Handle unexpected errors
+    res.status(200).json({
+      success: true,
+      message: "User is registration request received successfully",
+      data: { message: "Hi" },
+    });
+  } catch (err) {
+    console.log("createUser Controller", err);
+    next(err);
   }
 };
+
+// export const registerUser = async (req: Request, res: Response) => {
+//   try {
+//     const { name, email, password } = req.body;
+
+//     const existingUser = await findUserByEmail(email);
+//     if (existingUser) {
+//       return res.status(400).json({ message: "User already exists" });
+//     }
+
+//     await createUser({ name, email, password }); // Create new user in the database
+
+//     // const userToken = await createUserToken({
+//     //   type: "verify-email",
+//     //   email,
+//     //   isUsed: false,
+//     // });
+
+//     // const newLink = `${environment.client_base_url}/verify-email/${userToken.id}`; // Generate verification link
+
+//     // await sendEmail(
+//     //   email, // Recipient email
+//     //   `Confirm your email address for ${APP_NAME}`, // Email subject
+//     //   verificationEmailHTML(name, newLink) // HTML email content
+//     // );
+
+//     res.status(201).json({ message: "User created successfully" }); // Send success response
+//   } catch (error) {
+//     console.log("register error", error);
+//     res.status(500).json({ message: "Internal server error" }); // Handle unexpected errors
+//   }
+// };
 
 // export const verifyEmail = async (req: Request, res: Response) => {
 //   try {

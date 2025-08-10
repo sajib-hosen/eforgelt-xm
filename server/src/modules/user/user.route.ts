@@ -1,20 +1,20 @@
 import { Router } from "express";
-import {
-  // getMe,
-  // loginUser,
-  registerUser,
-  // verifyEmail,
-  // forgotPassword,
-  // resetPassword,
-  // refreshAccessToken,
-  // logoutUser,
-} from "./user.controller";
+import // getMe,
+// loginUser,
+// registerUser,
+// verifyEmail,
+// forgotPassword,
+// resetPassword,
+// refreshAccessToken,
+// logoutUser,
+"./user.controller";
+import { createUser } from "./user.service";
 // import { accessTokenGuard, refreshTokenGuard } from "../../guard/http-guards";
 // import asyncHandler from "../../utils/async-handler";
 
 const userRouter = Router();
 
-userRouter.post("/register", registerUser);
+userRouter.post("/register", createUser);
 
 // userRouter.post("/verify-email/:tokenId", verifyEmail);
 
