@@ -44,13 +44,13 @@ app.use(cookieParser());
 
 app.use(morgan("dev")); // logs method, url, status, response time, etc.
 
-connectToDatabase()
-  .then(() => {
-    console.log("Connected to Database");
-  })
-  .catch((error) => {
-    console.error("Database connection failed:", error);
-  });
+// connectToDatabase()
+//   .then(() => {
+//     console.log("Connected to Database");
+//   })
+//   .catch((error) => {
+//     console.error("Database connection failed:", error);
+//   });
 
 // app.use("/api/users", userRouter);
 // app.use("/api/quizzes", quizRouter);
