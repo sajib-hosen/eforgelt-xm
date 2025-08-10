@@ -1,7 +1,4 @@
-// import { Question, IQuestion } from './quiz.model';
-// import { QuizResult, IQuizResult } from './quiz-result.model'; // import the new model
-
-import { IQuizResult, QuizResult } from "./quiz.model";
+import { IQuizResult, QuizResult } from "../../models/quiz.model";
 
 interface SaveResultInput {
   userId?: string; // optional if you track users
