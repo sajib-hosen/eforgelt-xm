@@ -10,14 +10,12 @@ import morgan from "morgan"; // HTTP request logger middleware
 import connectToDatabase from "./config/db-connector";
 import quizRouter from "./modules/quiz/quiz.route"; // Quiz-related routes
 import adminRouter from "./modules/admin/admin.route"; // Admin-related routes
-
-// Create Express application
-const app = express();
+import serverless from "serverless-http";
 
 // Load environment variables from .env into process.env
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const app = express();
 
 app.use(express.json());
 
@@ -34,71 +32,46 @@ app.use(
 app.use(helmet());
 
 const limiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 15 minutes
+  windowMs: 10 * 60 * 1000, // 10 minutes
   max: 100, // Max 100 requests per IP
 });
-app.use(limiter); // Apply rate limiter globally
+app.use(limiter);
 
 app.use(cookieParser());
 
-app.use(morgan("dev")); // logs method, url, status, response time, etc.
-
-// Middleware to log every request
-// app.use((req, res, next) => {
-//   const start = Date.now();
-
-//   res.on("finish", () => {
-//     const duration = Date.now() - start;
-
-//     // ANSI escape codes for colors
-//     const reset = "\x1b[0m";
-//     const cyan = "\x1b[36m";
-//     const magenta = "\x1b[35m";
-//     const green = "\x1b[32m";
-//     const yellow = "\x1b[33m";
-//     const red = "\x1b[31m";
-//     const blue = "\x1b[34m";
-
-//     // Choose color based on status code
-//     let statusColor = green;
-//     if (res.statusCode >= 300 && res.statusCode < 400) statusColor = yellow;
-//     else if (res.statusCode >= 400) statusColor = red;
-
-//     console.log(
-//       `${cyan}${req.method}${reset} ${magenta}${req.originalUrl}${reset} -> ${statusColor}${res.statusCode}${reset} [${blue}${duration}ms${reset}]`
-//     );
-//   });
-
-//   next();
-// });
+app.use(morgan("dev"));
 
 app.use("/api/users", userRouter);
 app.use("/api/quizzes", quizRouter);
 app.use("/api/admin", adminRouter);
 
-// Simple health check or test route
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json("Hello, World!");
 });
 
-// Centralized error-handling middleware for catching all unhandled errors
+// Centralized error-handling middleware
 app.use((err: any, req: Request, res: Response, next: Function) => {
-  console.error(err.stack); // Log the error stack trace
-  res.status(500).json({ message: "Something went wrong!" }); // Send generic error response
+  console.error(err.stack);
+  res.status(500).json({ message: "Something went wrong!" });
 });
 
-// Start server only if DB connects
-const run = async () => {
-  await connectToDatabase();
+// Database connection caching to reuse connection across lambda invocations
+let isDbConnected = false;
 
-  app.listen(PORT, () => {
-    console.log(
-      `\x1b[38;2;50;205;50m🚀 Server is running on http://localhost:${PORT}\x1b[0m`
-    );
-  });
+const connectDbIfNeeded = async () => {
+  if (!isDbConnected) {
+    await connectToDatabase();
+    isDbConnected = true;
+  }
 };
 
-run().catch((err) => {
-  console.error("❌ App failed to start:", err);
-  process.exit(1);
-});
+// Export the serverless handler
+export const handler = async (req: any, res: any) => {
+  try {
+    await connectDbIfNeeded();
+    return serverless(app)(req, res);
+  } catch (error) {
+    console.error("Database connection error:", error);
+    res.status(500).json({ message: "Database connection error" });
+  }
+};
