@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import {
   createUser,
-  createUserToken,
+  // createUserToken,
   findUserByEmail,
   // findUserById,
   // findUserTokenById,
@@ -16,7 +16,7 @@ import {
 // import { generateTokens } from "../../utils/token.util";
 // import { resetPasswordEmailHTML } from "../../email-temps/reset-password-email-html";
 // import { EXPIRY_STAMP } from "../../utils/expiry-stamp";
-import environment from "../../config";
+// import environment from "../../config";
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -29,13 +29,13 @@ export const registerUser = async (req: Request, res: Response) => {
 
     await createUser({ name, email, password }); // Create new user in the database
 
-    const userToken = await createUserToken({
-      type: "verify-email",
-      email,
-      isUsed: false,
-    });
+    // const userToken = await createUserToken({
+    //   type: "verify-email",
+    //   email,
+    //   isUsed: false,
+    // });
 
-    const newLink = `${environment.client_base_url}/verify-email/${userToken.id}`; // Generate verification link
+    // const newLink = `${environment.client_base_url}/verify-email/${userToken.id}`; // Generate verification link
 
     // await sendEmail(
     //   email, // Recipient email
