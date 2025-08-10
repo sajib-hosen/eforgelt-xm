@@ -1,33 +1,25 @@
-import { userRouter } from "../modules/users/user.route";
-import { bloodPostRouter } from "../modules/bloodPost/bloodPost.route";
 import { Router } from "express";
-import { AuthRouters } from "../modules/auth/auth.route";
-import { donorRequestRouter } from "../modules/donorRequest/donorRequest.route";
-import { reviewRouter } from "../modules/review/review.route";
+import userRouter from "../modules/user/user.route";
 
 const router = Router();
+
+// app.use("/api/users", userRouter);
+// app.use("/api/quizzes", quizRouter);
+// app.use("/api/admin", adminRouter);
 
 const routers = [
   {
     path: "/users",
     route: userRouter,
   },
-  {
-    path: "/blood-posts",
-    route: bloodPostRouter,
-  },
-  {
-    path: "/auth",
-    route: AuthRouters,
-  },
-  {
-    path: "/request",
-    route: donorRequestRouter,
-  },
-  {
-    path: "/review",
-    route: reviewRouter,
-  },
+  // {
+  //   path: "/quizzes",
+  //   route: bloodPostRouter,
+  // },
+  // {
+  //   path: "/admin",
+  //   route: AuthRouters,
+  // },
 ];
 
 routers.forEach((route) => router.use(route.path, route.route));
