@@ -7,6 +7,7 @@ import dotenv from "dotenv"; // To load environment variables from .env file
 import rateLimit from "express-rate-limit"; // To limit repeated requests (e.g. brute-force protection)
 import cookieParser from "cookie-parser"; // To parse cookies from the client
 import morgan from "morgan"; // HTTP request logger middleware
+import connectToDatabase from "./config/db-connector";
 // import connectToDatabase from "./config/db-connector";
 // import quizRouter from "./modules/quiz/quiz.route"; // Quiz-related routes
 // import adminRouter from "./modules/admin/admin.route"; // Admin-related routes
@@ -60,7 +61,7 @@ app.use((err: any, req: Request, res: Response, next: Function) => {
 
 // Start server only if DB connects
 const run = async () => {
-  // await connectToDatabase();
+  await connectToDatabase();
 
   app.listen(PORT, () => {
     console.log(
